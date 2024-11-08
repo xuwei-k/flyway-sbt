@@ -28,6 +28,8 @@ jobs:
         exclude:
           - java: temurin@8
             os: macos-latest
+          - java: temurin@17
+            os: windows-latest
     runs-on: ${{ matrix.os }}
     steps:
       - name: Ignore line ending differences in git

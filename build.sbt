@@ -1,4 +1,5 @@
-val flywayVersion = "9.22.0"
+lazy val repoSlug = "sbt/flyway-sbt"
+lazy val flywayVersion = "9.22.0"
 
 ThisBuild / organization := "com.github.sbt"
 ThisBuild / version := {
@@ -40,10 +41,18 @@ lazy val root = (project in file ("."))
       publishMavenStyle := true,
   )
 
+ThisBuild / description := "An sbt plugin for Flyway database migration"
 ThisBuild / developers := List(
   Developer(id="davidmweber", name="David Weber", email="dave@veryflatcat.com", url=url("https://davidmweber.github.io/flyway-sbt-docs/"))
 )
-ThisBuild / licenses := Seq("APL2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt"))
+ThisBuild / licenses := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt"))
+ThisBuild / scmInfo := Some(
+  ScmInfo(
+    url(s"https://github.com/$repoSlug"),
+    s"scm:git@github.com:sbt/$repoSlug.git"
+  )
+)
+ThisBuild / homepage := Some(url(s"https://github.com/$repoSlug"))
 ThisBuild / publishTo := sonatypePublishTo.value
 ThisBuild / githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("test", "scripted")))
 ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
@@ -66,4 +75,7 @@ ThisBuild / githubWorkflowJavaVersions := Seq(
   JavaSpec.temurin("8"),
   JavaSpec.temurin("17")
 )
-ThisBuild / githubWorkflowBuildMatrixExclusions += MatrixExclude(Map("java" -> "temurin@8", "os" -> "macos-latest"))
+ThisBuild / githubWorkflowBuildMatrixExclusions ++= Seq(
+  MatrixExclude(Map("java" -> "temurin@8", "os" -> "macos-latest")),
+  MatrixExclude(Map("java" -> "temurin@17", "os" -> "windows-latest")),
+)
