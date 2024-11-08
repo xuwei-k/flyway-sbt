@@ -15,10 +15,10 @@ lazy val root = (project in file ("."))
         "-unchecked",
         "-Xfuture"
       ),
-      scalacOptions in (Compile, doc) ++= {
+      Compile / doc / scalacOptions ++= {
         Seq(
           "-sourcepath",
-          (baseDirectory in LocalRootProject).value.getAbsolutePath,
+          (LocalRootProject / baseDirectory).value.getAbsolutePath,
           "-doc-source-url",
           s"""https://github.com/flyway/flyway-sbt/tree/${sys.process.Process("git rev-parse HEAD").lineStream_!.head}€{FILE_PATH}.scala"""
         )
