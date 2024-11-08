@@ -1,24 +1,22 @@
-
 ![CI](https://github.com/sbt/flyway-sbt/workflows/CI/badge.svg)
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.davidmweber/flyway-sbt.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.davidmweber%22%20AND%20a%3A%22flyway-sbt%22)
 
-## Sbt 1.x plugin for [Flyway](https://flywaydb.org)
+## sbt plugin for [Flyway](https://flywaydb.org)
 
-Welcome to the home for the `sbt` v1.x plugin for flyway. The [user manual](https://davidmweber.github.io/flyway-sbt-docs/)
+Welcome to the home for the sbt plugin for flyway. The [user manual](https://davidmweber.github.io/flyway-sbt-docs/)
 will tell you how to get started. This project is based on the original 
 [flyway-sbt](https://github.com/flyway/flyway/tree/flyway-4.2.0/flyway-sbt) that was in the flyway repository through 
 version 4.2.1.
 
-## Maintenance
-This repository is a community project and not officially maintained by the Flyway Team at Redgate.
-This project is looked after only by the open source community. Community Maintainers are people who have agreed to be contacted with queries for support and maintenance.
-
 ### Getting started
+
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.sbt/flyway-sbt_2.12_1.0)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.github.sbt%22%20AND%20a%3A%22flyway-sbt_2.12_1.0%22)
+
 Adding Flyway to your build is very easy. First, update to your `project/plugin.sbt` file to include:
+
 ```sbt
- addSbtPlugin("io.github.davidmweber" % "flyway-sbt" % "7.4.0")
+ addSbtPlugin("com.github.sbt" % "flyway-sbt" % "x.y.z")
 ```
-Please check out [Maven Central](https://search.maven.org/search?q=g:io.github.davidmweber%20AND%20a:flyway-sbt&core=gav) 
+Please check out [Maven Central](https://repo1.maven.org/maven2/com/github/sbt/flyway-sbt_2.12_1.0/) 
 for versions of `flyway-sbt` for previous versions of Flyway.
 
 Edit `build.sbt` to enable the plugin and configure the database access:
@@ -47,6 +45,10 @@ To run flyway before any code generation, let compile depend on flywayMigrate
 ```
 
 Note that the `flywayTarget` setting has been disabled due to [this bug](https://github.com/flyway/flyway/issues/1919).
+
+## Maintenance
+This repository is a community project and not officially maintained by the Flyway Team at Redgate.
+This project is looked after only by the open source community. Community Maintainers are people who have agreed to be contacted with queries for support and maintenance.
 
 ### Building and testing
 Build and testing uses `sbt` and it's plugin [testing framework](http://www.scala-sbt.org/1.x/docs/Testing-sbt-plugins.html). 
