@@ -1,10 +1,12 @@
 lazy val repoSlug = "sbt/flyway-sbt"
 lazy val flywayVersion = "9.22.0"
+lazy val scala212 = "2.12.20"
+lazy val scala3 = "3.3.4"
 
 ThisBuild / organization := "com.github.sbt"
 ThisBuild / version := {
   val orig = (ThisBuild / version).value
-  if (orig.startsWith("0.0") && orig.endsWith("-SNAPSHOT")) {
+  if (orig.startsWith("9.") && orig.endsWith("-SNAPSHOT")) {
     "9.0.0-SNAPSHOT"
   } else orig
 }
@@ -12,6 +14,7 @@ lazy val root = (project in file("."))
   .enablePlugins(SbtPlugin)
   .settings(
     name := "flyway-sbt",
+    crossScalaVersions := Seq(scala212, scala3),
     libraryDependencies ++= Seq(
       "org.flywaydb" % "flyway-core" % flywayVersion
     ),
@@ -27,15 +30,19 @@ lazy val root = (project in file("."))
       }
     },
     Compile / doc / scalacOptions ++= {
-      Seq(
-        "-sourcepath",
-        (LocalRootProject / baseDirectory).value.getAbsolutePath,
-        "-doc-source-url",
-        s"""https://github.com/sbt/flyway-sbt/tree/${sys.process
-            .Process("git rev-parse HEAD")
-            .lineStream_!
-            .head}€{FILE_PATH}.scala"""
-      )
+      scalaBinaryVersion.value match {
+        case "2.12" =>
+          Seq(
+            "-sourcepath",
+            (LocalRootProject / baseDirectory).value.getAbsolutePath,
+            "-doc-source-url",
+            s"""https://github.com/sbt/flyway-sbt/tree/${sys.process
+                .Process("git rev-parse HEAD")
+                .lineStream_!
+                .head}€{FILE_PATH}.scala"""
+          )
+        case _ => Nil
+      }
     },
     scriptedLaunchOpts := {
       scriptedLaunchOpts.value ++
@@ -63,7 +70,7 @@ ThisBuild / scmInfo := Some(
 )
 ThisBuild / homepage := Some(url(s"https://github.com/$repoSlug"))
 ThisBuild / publishTo := sonatypePublishTo.value
-ThisBuild / githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("test", "scripted")))
+ThisBuild / githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("+test", "+scripted")))
 ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
 ThisBuild / githubWorkflowPublishTargetBranches :=
   Seq(RefPredicate.StartsWith(Ref.Tag("v")))
@@ -79,12 +86,11 @@ ThisBuild / githubWorkflowPublish := Seq(
     )
   )
 )
-ThisBuild / githubWorkflowOSes := Seq("ubuntu-latest", "macos-latest", "windows-latest")
+ThisBuild / githubWorkflowOSes := Seq("ubuntu-latest", "macos-latest")
 ThisBuild / githubWorkflowJavaVersions := Seq(
   JavaSpec.temurin("8"),
   JavaSpec.temurin("17")
 )
 ThisBuild / githubWorkflowBuildMatrixExclusions ++= Seq(
   MatrixExclude(Map("java" -> "temurin@8", "os" -> "macos-latest")),
-  MatrixExclude(Map("java" -> "temurin@17", "os" -> "windows-latest")),
 )
