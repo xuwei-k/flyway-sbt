@@ -8,42 +8,51 @@ ThisBuild / version := {
     "9.0.0-SNAPSHOT"
   } else orig
 }
-lazy val root = (project in file ("."))
-    .enablePlugins(SbtPlugin)
-    .settings(
-      name := "flyway-sbt",
-      libraryDependencies ++= Seq(
-        "org.flywaydb" % "flyway-core" % flywayVersion
-      ),
-      scalacOptions ++= Seq(
-        "-deprecation",
-        "-unchecked",
-        "-Xfuture"
-      ),
-      pluginCrossBuild / sbtVersion := {
-        scalaBinaryVersion.value match {
-          case "2.12" => "1.5.8"
-          case _      => "2.0.0-M2"
-        }
-      },
-      Compile / doc / scalacOptions ++= {
-        Seq(
-          "-sourcepath",
-          (LocalRootProject / baseDirectory).value.getAbsolutePath,
-          "-doc-source-url",
-          s"""https://github.com/sbt/flyway-sbt/tree/${sys.process.Process("git rev-parse HEAD").lineStream_!.head}€{FILE_PATH}.scala"""
-        )
-      },
-      scriptedLaunchOpts := { scriptedLaunchOpts.value ++
+lazy val root = (project in file("."))
+  .enablePlugins(SbtPlugin)
+  .settings(
+    name := "flyway-sbt",
+    libraryDependencies ++= Seq(
+      "org.flywaydb" % "flyway-core" % flywayVersion
+    ),
+    scalacOptions ++= Seq(
+      "-deprecation",
+      "-unchecked",
+      "-Xfuture"
+    ),
+    pluginCrossBuild / sbtVersion := {
+      scalaBinaryVersion.value match {
+        case "2.12" => "1.5.8"
+        case _      => "2.0.0-M2"
+      }
+    },
+    Compile / doc / scalacOptions ++= {
+      Seq(
+        "-sourcepath",
+        (LocalRootProject / baseDirectory).value.getAbsolutePath,
+        "-doc-source-url",
+        s"""https://github.com/sbt/flyway-sbt/tree/${sys.process
+            .Process("git rev-parse HEAD")
+            .lineStream_!
+            .head}€{FILE_PATH}.scala"""
+      )
+    },
+    scriptedLaunchOpts := {
+      scriptedLaunchOpts.value ++
         Seq("-Xmx1024M", "-Dplugin.version=" + version.value)
-      },
-      scriptedBufferLog := false,
-      publishMavenStyle := true,
+    },
+    scriptedBufferLog := false,
+    publishMavenStyle := true,
   )
 
 ThisBuild / description := "An sbt plugin for Flyway database migration"
 ThisBuild / developers := List(
-  Developer(id="davidmweber", name="David Weber", email="dave@veryflatcat.com", url=url("https://davidmweber.github.io/flyway-sbt-docs/"))
+  Developer(
+    id = "davidmweber",
+    name = "David Weber",
+    email = "dave@veryflatcat.com",
+    url = url("https://davidmweber.github.io/flyway-sbt-docs/")
+  )
 )
 ThisBuild / licenses := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt"))
 ThisBuild / scmInfo := Some(
