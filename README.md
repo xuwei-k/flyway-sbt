@@ -1,5 +1,5 @@
 
-![Scala CI](https://github.com/flyway/flyway-sbt/workflows/Scala%20CI/badge.svg)
+![CI](https://github.com/sbt/flyway-sbt/workflows/CI/badge.svg)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.davidmweber/flyway-sbt.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.davidmweber%22%20AND%20a%3A%22flyway-sbt%22)
 
 ## Sbt 1.x plugin for [Flyway](https://flywaydb.org)
@@ -12,11 +12,6 @@ version 4.2.1.
 ## Maintenance
 This repository is a community project and not officially maintained by the Flyway Team at Redgate.
 This project is looked after only by the open source community. Community Maintainers are people who have agreed to be contacted with queries for support and maintenance.
-Community Maintainers: 
-- [@davidmweber](https://github.com/davidmweber)
-
-If you would like to be named as an Community Maintainer, let us know via Twitter: https://twitter.com/flywaydb.
-
 
 ### Getting started
 Adding Flyway to your build is very easy. First, update to your `project/plugin.sbt` file to include:
@@ -69,7 +64,7 @@ sbt scripted
 
 Early adopters should just publish a clone or fork of this repository locally:
 ```bash
-git clone https://github.com/flyway/flyway-sbt.git
+git clone https://github.com/sbt/flyway-sbt.git
 cd flyway-sbt
 sbt publishLocal
 ```
