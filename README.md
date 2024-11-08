@@ -33,10 +33,10 @@ flywayUrl := "jdbc:hsqldb:file:target/flyway_sample;shutdown=true"
 flywayUser := "SA"
 flywayPassword := ""
 flywayLocations := Seq("filesystem:src/main/resources/db/migration")
-flywayUrl in Test := "jdbc:hsqldb:file:target/flyway_sample;shutdown=true"
-flywayUser in Test := "SA"
-flywayLocations in Test := Seq("filesystem:src/main/resources/db/migration")
-flywayPassword in Test := ""
+Test/ flywayUrl := "jdbc:hsqldb:file:target/flyway_sample;shutdown=true"
+Test/ flywayUser := "SA"
+Test/ flywayLocations := Seq("filesystem:src/main/resources/db/migration")
+Test/ flywayPassword := ""
 ```
 
 Migrate your database using `sbt flywayMigrate` or clean it using `sbt flywayClean`.

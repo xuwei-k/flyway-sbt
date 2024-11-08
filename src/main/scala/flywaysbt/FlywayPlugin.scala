@@ -14,17 +14,17 @@
 package flywaysbt
 
 import java.util.Properties
-import org.flywaydb.core.Flyway
 import org.flywaydb.core.api.callback.Callback
-import org.flywaydb.core.api.logging.{ Log, LogCreator, LogFactory }
-import org.flywaydb.core.internal.info.MigrationInfoDumper
-import sbt.Keys.*
-import sbt.*
-
-import scala.collection.JavaConverters.*
 import org.flywaydb.core.api.configuration.FluentConfiguration
+import org.flywaydb.core.api.logging.{ Log, LogCreator, LogFactory }
 import org.flywaydb.core.api.pattern.ValidatePattern
+import org.flywaydb.core.Flyway
+import org.flywaydb.core.internal.info.MigrationInfoDumper
 import org.flywaydb.core.internal.util.ValidatePatternUtils
+import sbt.{ given, * }
+import sbt.Keys.*
+import scala.collection.JavaConverters.*
+import xsbti.FileConverter
 
 object FlywayPlugin extends AutoPlugin {
 
@@ -324,13 +324,13 @@ object FlywayPlugin extends AutoPlugin {
         // fullClasspath triggers the compile task, so use a dynamic task to only run it if we need to.
         // https://github.com/flyway/flyway-sbt/issues/10
         if (flywayLocations.value.forall(_.startsWith("filesystem:"))) {
-          externalDependencyClasspath in conf
+          conf / externalDependencyClasspath
         } else {
-          fullClasspath in conf
+          conf / fullClasspath
         }
       }).value,
       // Tasks
-      flywayDefaults := withPrepared(flywayClasspath.value, streams.value)(Flyway.configure()),
+      flywayDefaults := withPrepared(flywayClasspath.value, fileConverter.value, streams.value)(Flyway.configure()),
       flywayMigrate := flywayDefaults.value.configure(flywayConfig.value).migrate(),
       flywayValidate := flywayDefaults.value.configure(flywayConfig.value).validate(),
       flywayInfo := {
@@ -350,9 +350,9 @@ object FlywayPlugin extends AutoPlugin {
     Flyway.configure()
   }
 
-  private def withPrepared[T](cp: Types.Id[Keys.Classpath], streams: TaskStreams)(f: => T): T = {
+  private def withPrepared[T](cp: Types.Id[Keys.Classpath], conv: FileConverter, streams: TaskStreams)(f: => T): T = {
     registerAsFlywayLogger(streams)
-    withContextClassLoader(cp)(f)
+    withContextClassLoader(cp, conv)(f)
   }
 
   /**
@@ -363,8 +363,11 @@ object FlywayPlugin extends AutoPlugin {
     FlywaySbtLog.streams = Some(streams)
   }
 
-  private def withContextClassLoader[T](cp: Types.Id[Keys.Classpath])(f: => T): T = {
-    val classloader = sbt.internal.inc.classpath.ClasspathUtilities.toLoader(cp.map(_.data), getClass.getClassLoader)
+  private def withContextClassLoader[T](cp: Types.Id[Keys.Classpath], conv0: FileConverter)(f: => T): T = {
+    implicit val conv: FileConverter = conv0
+
+    val classloader =
+      sbt.internal.inc.classpath.ClasspathUtil.toLoader(cp.map(PluginCompat.toNioPath), getClass.getClassLoader)
     val thread = Thread.currentThread
     val oldLoader = thread.getContextClassLoader
     try {
