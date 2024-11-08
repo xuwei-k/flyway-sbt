@@ -65,7 +65,7 @@ ThisBuild / licenses := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/
 ThisBuild / scmInfo := Some(
   ScmInfo(
     url(s"https://github.com/$repoSlug"),
-    s"scm:git@github.com:sbt/$repoSlug.git"
+    s"scm:git@github.com:$repoSlug.git"
   )
 )
 ThisBuild / homepage := Some(url(s"https://github.com/$repoSlug"))
