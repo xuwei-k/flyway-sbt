@@ -17,7 +17,12 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Check project is formatted
-        uses: jrouly/scalafmt-native-action@v4
+      - uses: actions/setup-java@v4
         with:
-          arguments: '--list'
+          distribution: temurin
+          java-version: 8
+
+      - uses: sbt/setup-sbt@v1
+
+      - name: Check project is formatted
+        run: sbt scalafmtSbtCheck "+ scalafmtCheckAll"

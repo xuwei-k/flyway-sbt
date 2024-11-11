@@ -231,13 +231,13 @@ object FlywayPlugin extends AutoPlugin {
   // *********************
   // flyway defaults
   // *********************
-  override def projectSettings: Seq[Setting[_]] =
+  override def projectSettings: Seq[Setting[?]] =
     flywayBaseSettings(Runtime) ++ inConfig(Test)(flywayBaseSettings(Test))
 
-  def flywayBaseSettings(conf: Configuration): Seq[Setting[_]] = {
-    import FlywayPlugin.autoImport._
+  def flywayBaseSettings(conf: Configuration): Seq[Setting[?]] = {
+    import FlywayPlugin.autoImport.*
     val defaults = getFlywayDefaults
-    Seq[Setting[_]](
+    Seq[Setting[?]](
       flywayDriver := "",
       flywayUrl := "",
       flywayUser := "",
@@ -302,7 +302,7 @@ object FlywayPlugin extends AutoPlugin {
         flywaySqlMigrationPrefix.value,
         flywayRepeatableSqlMigrationPrefix.value,
         flywaySqlMigrationSeparator.value,
-        flywaySqlMigrationSuffixes.value: _*
+        flywaySqlMigrationSuffixes.value*
       ),
       flywayConfigMigrate := ConfigMigrate(
         flywayIgnoreMissingMigrations.value,
@@ -406,7 +406,7 @@ object FlywayPlugin extends AutoPlugin {
     }
     def configure(config: ConfigBase): FluentConfiguration = {
       flyway
-        .schemas(config.schemas: _*)
+        .schemas(config.schemas*)
         .table(config.table)
         .baselineVersion(config.baselineVersion)
         .baselineDescription(config.baselineDescription)
@@ -414,14 +414,14 @@ object FlywayPlugin extends AutoPlugin {
     }
     def configure(config: ConfigMigrationLoading): FluentConfiguration = {
       flyway
-        .locations(config.locations: _*)
+        .locations(config.locations*)
         .encoding(config.encoding)
         .cleanOnValidationError(config.cleanOnValidationError)
         .cleanDisabled(config.cleanDisabled)
         // .target(config.target) Setting this as-is will make the default be "current", which we don't want
         .outOfOrder(config.outOfOrder)
-        .callbacks(config.callbacks: _*)
-        .resolvers(config.resolvers: _*)
+        .callbacks(config.callbacks*)
+        .resolvers(config.resolvers*)
         .skipDefaultResolvers(config.skipDefaultResolvers)
         .skipDefaultCallbacks(config.skipDefaultCallbacks)
         .validateMigrationNaming(config.validateMigrationNaming)
@@ -431,12 +431,12 @@ object FlywayPlugin extends AutoPlugin {
         .sqlMigrationPrefix(config.sqlMigrationPrefix)
         .repeatableSqlMigrationPrefix(config.repeatableSqlMigrationPrefix)
         .sqlMigrationSeparator(config.sqlMigrationSeparator)
-        .sqlMigrationSuffixes(config.sqlMigrationSuffixes: _*)
+        .sqlMigrationSuffixes(config.sqlMigrationSuffixes*)
     }
     def configure(config: ConfigMigrate): FluentConfiguration = {
 
       flyway
-        .ignoreMigrationPatterns(config.ignorePatterns: _*)
+        .ignoreMigrationPatterns(config.ignorePatterns*)
         .baselineOnMigrate(config.baselineOnMigrate)
         .validateOnMigrate(config.validateOnMigrate)
         .mixed(config.mixed)
@@ -459,7 +459,7 @@ object FlywayPlugin extends AutoPlugin {
   }
 
   private object SbtLogCreator extends LogCreator {
-    def createLogger(clazz: Class[_]): FlywaySbtLog.type = FlywaySbtLog
+    def createLogger(clazz: Class[?]): FlywaySbtLog.type = FlywaySbtLog
   }
 
   private object FlywaySbtLog extends Log {
