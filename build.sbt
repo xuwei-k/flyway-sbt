@@ -1,5 +1,5 @@
 lazy val repoSlug = "sbt/flyway-sbt"
-lazy val flywayVersion = "9.22.3"
+lazy val flywayVersion = "10.21.0"
 lazy val scala212 = "2.12.20"
 lazy val scala3 = "3.3.4"
 
@@ -88,9 +88,5 @@ ThisBuild / githubWorkflowPublish := Seq(
 )
 ThisBuild / githubWorkflowOSes := Seq("ubuntu-latest", "macos-latest")
 ThisBuild / githubWorkflowJavaVersions := Seq(
-  JavaSpec.temurin("8"),
   JavaSpec.temurin("17")
-)
-ThisBuild / githubWorkflowBuildMatrixExclusions ++= Seq(
-  MatrixExclude(Map("java" -> "temurin@8", "os" -> "macos-latest")),
 )
